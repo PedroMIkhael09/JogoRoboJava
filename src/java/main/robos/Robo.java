@@ -1,3 +1,6 @@
+package robos;
+import exception.MovimentoInvalidoException;
+
 public class Robo {
 	protected String cor;
 	protected int posicaoX;
@@ -43,11 +46,11 @@ public class Robo {
 	}
 	
 	public boolean moverRobo(int numero) throws MovimentoInvalidoException {
-		if (numero == 1) { // up
+		if (numero == 1) {
 			posicaoY++;
 			movimentosValidos++;
 			return true;
-		} else if (numero == 2) { // down
+		} else if (numero == 2) {
 			if (posicaoY - 1 < 0) {
 				movimentosInvalidos++;
 				throw new MovimentoInvalidoException("2 (down)");
@@ -55,11 +58,11 @@ public class Robo {
 			posicaoY--;
 			movimentosValidos++;
 			return true;
-		} else if (numero == 3) { // right
+		} else if (numero == 3) {
 			posicaoX++;
 			movimentosValidos++;
 			return true;
-		} else if (numero == 4) { // left
+		} else if (numero == 4) {
 			if (posicaoX - 1 < 0) {
 				movimentosInvalidos++;
 				throw new MovimentoInvalidoException("4 (left)");
@@ -72,7 +75,6 @@ public class Robo {
 			return false;
 		}
 	}
-	
 	
 	
 	public boolean encontrarAlimento(int posicaoXAlimento, int posicaoYAlimento){

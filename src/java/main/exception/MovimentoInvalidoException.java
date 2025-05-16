@@ -1,3 +1,4 @@
+package exception;
 public class MovimentoInvalidoException extends Exception {
 	
 	public MovimentoInvalidoException(String direcao) {
