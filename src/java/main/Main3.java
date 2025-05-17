@@ -6,7 +6,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Main3 {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws MovimentoInvalidoException {
 		Scanner teclado = new Scanner(System.in);
 		Random random = new Random();
 		String[] direcoes = {"up", "down", "left", "right"};
@@ -35,49 +35,73 @@ public class Main3 {
 		int alimentoY = teclado.nextInt();
 		
 		Robo vencedor = null;
+		boolean robo1Achou = false;
+		boolean robo2Achou = false;
 		
 		while (true) {
 			
-			String direcao1 = direcoes[random.nextInt(4)];
-			try {
-				robo1.moverRobo(direcao1);
-				System.out.println("Robô " + robo1.getCor() + " moveu para " + direcao1 +
-						" Posição atual: (" + robo1.getPosicaoX() + "," + robo1.getPosicaoY() + ")");
-			} catch (MovimentoInvalidoException e) {
-				System.out.println("Robô " + robo1.getCor() + " tentou um movimento inválido: " + e.getMessage());
+			if (!robo1Achou) {
+				String direcao1 = direcoes[random.nextInt(4)];
+				try {
+					robo1.moverRobo(direcao1);
+					System.out.println("Robô " + robo1.getCor() + " moveu para " + direcao1 +
+							" Posição atual: (" + robo1.getPosicaoX() + "," + robo1.getPosicaoY() + ")");
+				} catch (MovimentoInvalidoException e) {
+					System.out.println("Robô " + robo1.getCor() + " tentou um movimento inválido: " + e.getMessage());
+				}
+				
+				if (robo1.encontrarAlimento(alimentoX, alimentoY)) {
+					System.out.println("O robo " + robo1.getCor() + " achou o alimento!");
+					robo1Achou = true;
+					if (vencedor == null) {
+						vencedor = robo1;
+					}
+				}
 			}
-			
-			if (robo1.encontrarAlimento(alimentoX, alimentoY)) {
-				vencedor = robo1;
-				break;
-			}
-			
-			
-			try {
-				Thread.sleep(3500);
-			} catch (InterruptedException e) {
-			}
-			
-			
-			String direcao2 = direcoes[random.nextInt(4)];
-			try {
-				robo2.moverRobo(direcao2);
-				System.out.println("Robô " + robo2.getCor() + " moveu para " + direcao2 +
-						" Posição atual: (" + robo2.getPosicaoX() + "," + robo2.getPosicaoY() + ")");
-			} catch (MovimentoInvalidoException e) {
-				System.out.println("Robô " + robo2.getCor() + " tentou um movimento inválido: " + e.getMessage());
-			}
-			
-			if (robo2.encontrarAlimento(alimentoX, alimentoY)) {
-				vencedor = robo2;
-				break;
-			}
-			
 			
 			try {
 				Thread.sleep(3500);
 			} catch (InterruptedException e) {
+			}
 			
+			if (!robo2Achou) {
+				if (!robo2Achou) {
+					String direcao2 = direcoes[random.nextInt(4)];
+					boolean moveu = robo2.moverRobo(direcao2);
+					
+					String direcaoUsada = ((RoboInteligente) robo2).getUltimaDirecaoUsada();
+					
+					if (moveu) {
+						if (direcao2.equals(direcaoUsada)) {
+							System.out.println("Robô " + robo2.getCor() + " moveu para " + direcaoUsada +
+									" Posição atual: (" + robo2.getPosicaoX() + "," + robo2.getPosicaoY() + ")");
+						} else {
+							System.out.println("Robô " + robo2.getCor() + " tentou '" + direcao2 + "' (inválido), " +
+									"mas usou '" + direcaoUsada + "' no lugar. Essa direção inválida não será repetida.");
+							System.out.println("Nova posição: (" + robo2.getPosicaoX() + "," + robo2.getPosicaoY() + ")");
+						}
+					} else {
+						System.out.println("Robô " + robo2.getCor() + " não conseguiu se mover em nenhuma direção válida.");
+					}
+					
+					if (robo2.encontrarAlimento(alimentoX, alimentoY)) {
+						System.out.println("O robô " + robo2.getCor() + " achou o alimento!");
+						robo2Achou = true;
+						if (vencedor == null) {
+							vencedor = robo2;
+						}
+					}
+				}
+				
+			}
+			
+			if (robo1Achou && robo2Achou) {
+				break;
+			}
+			
+			try {
+				Thread.sleep(3500);
+			} catch (InterruptedException e) {
 			}
 		}
 		
