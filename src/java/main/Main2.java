@@ -1,4 +1,5 @@
 import robos.Robo;
+import robos.RoboNormal;
 import exception.MovimentoInvalidoException;
 import java.util.Random;
 import java.util.Scanner;
@@ -12,23 +13,27 @@ public class Main2 {
 		System.out.println("Seja bem-vindo ao jogo dos dois robôs!");
 		
 		System.out.print("Digite a cor do primeiro robô: ");
-		String cor1 = teclado.nextLine();
-		Robo robo1 = new Robo(cor1);
+		String cor1 = teclado.nextLine().toLowerCase();
+		Robo roboNormal1 = new RoboNormal(cor1);
 		
 		System.out.println("Digite a cor do segundo robô:");
-		String cor2 = teclado.nextLine();
+		String cor2 = teclado.nextLine().toLowerCase();
 		
-		while (cor2.equalsIgnoreCase(cor1)) {
+		while (cor2.equals(cor1)) {
 			System.out.println("Essa cor já foi usada. Digite uma cor diferente:");
 			cor2 = teclado.nextLine();
 		}
 		
-		Robo robo2 = new Robo(cor2);
+		Robo roboNormal2 = new RoboNormal(cor2);
 		
 		System.out.print("Digite a posição X do alimento: ");
 		int alimentoX = teclado.nextInt();
 		System.out.print("Digite a posição Y do alimento: ");
 		int alimentoY = teclado.nextInt();
+		
+		System.out.println("O primeiro Robo Normal começa na posição: (" + roboNormal1.getPosicaoX() + ", " + roboNormal1.getPosicaoY() + "");
+		
+		System.out.println("O segundo Robo Normal começa na posição: (" + roboNormal2.getPosicaoX() + ", " + roboNormal2.getPosicaoY() + "");
 		
 		Robo vencedor = null;
 		
@@ -36,15 +41,15 @@ public class Main2 {
 			
 			String direcao1 = direcoes[random.nextInt(4)];
 			try {
-				robo1.moverRobo(direcao1);
-				System.out.println("Robô " + robo1.getCor() + " moveu para " + direcao1 +
-						" Posição atual: (" + robo1.getPosicaoX() + "," + robo1.getPosicaoY() + ")");
+				roboNormal1.moverRobo(direcao1);
+				System.out.println("Robô " + roboNormal1.getCor() + " moveu para " + direcao1 +
+						" Posição atual: (" + roboNormal1.getPosicaoX() + "," + roboNormal1.getPosicaoY() + ")");
 			} catch (MovimentoInvalidoException e) {
-				System.out.println("Robô " + robo1.getCor() + " tentou um movimento inválido: " + e.getMessage());
+				System.out.println("Robô " + roboNormal1.getCor() + " tentou um movimento inválido: " + e.getMessage());
 			}
 			
-			if (robo1.encontrarAlimento(alimentoX, alimentoY)) {
-				vencedor = robo1;
+			if (roboNormal1.encontrarAlimento(alimentoX, alimentoY)) {
+				vencedor = roboNormal1;
 				break;
 			}
 			
@@ -57,15 +62,15 @@ public class Main2 {
 		
 			String direcao2 = direcoes[random.nextInt(4)];
 			try {
-				robo2.moverRobo(direcao2);
-				System.out.println("Robô " + robo2.getCor() + " moveu para " + direcao2 +
-						" Posição atual: (" + robo2.getPosicaoX() + "," + robo2.getPosicaoY() + ")");
+				roboNormal2.moverRobo(direcao2);
+				System.out.println("Robô " + roboNormal2.getCor() + " moveu para " + direcao2 +
+						" Posição atual: (" + roboNormal2.getPosicaoX() + "," + roboNormal2.getPosicaoY() + ")");
 			} catch (MovimentoInvalidoException e) {
-				System.out.println("Robô " + robo2.getCor() + " tentou um movimento inválido: " + e.getMessage());
+				System.out.println("Robô " + roboNormal2.getCor() + " tentou um movimento inválido: " + e.getMessage());
 			}
 			
-			if (robo2.encontrarAlimento(alimentoX, alimentoY)) {
-				vencedor = robo2;
+			if (roboNormal2.encontrarAlimento(alimentoX, alimentoY)) {
+				vencedor = roboNormal2;
 				break;
 			}
 			
@@ -78,9 +83,9 @@ public class Main2 {
 		}
 		
 		System.out.println("\n O robô vencedor foi o de cor: " + vencedor.getCor());
-		System.out.println("Movimentos do robô " + robo1.getCor() + ": válidos = " + robo1.getMovimentosValidos() +
-				", inválidos = " + robo1.getMovimentosInvalidos());
-		System.out.println("Movimentos do robô " + robo2.getCor() + ": válidos = " + robo2.getMovimentosValidos() +
-				", inválidos = " + robo2.getMovimentosInvalidos());
+		System.out.println("Movimentos do robô " + roboNormal1.getCor() + ": válidos = " + roboNormal1.getMovimentosValidos() +
+				", inválidos = " + roboNormal1.getMovimentosInvalidos());
+		System.out.println("Movimentos do robô " + roboNormal2.getCor() + ": válidos = " + roboNormal2.getMovimentosValidos() +
+				", inválidos = " + roboNormal2.getMovimentosInvalidos());
 	}
 }

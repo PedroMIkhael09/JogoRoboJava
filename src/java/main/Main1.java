@@ -1,52 +1,61 @@
 import exception.MovimentoInvalidoException;
 import robos.Robo;
+import robos.RoboNormal;
+
 import java.util.Scanner;
 
 public class Main1 {
 	public static void main(String[] args) {
 		Scanner teclado = new Scanner(System.in);
 		
-		System.out.println("Seja bem vindo ao jogo do robo!\n ");
-		System.out.println("Regras do jogo:\n-Digite 1 ou 'up' para aumentar uma casa " +
-				"no" +
-				" " +
-				"eixo Y\n-Digite 2 ou 'down' para diminuir uma casa no eixo Y\n-Digite " +
-				"3 " +
-				"ou" +
-				" 'right' para ir aumentar uma casa no eixo X\n-Digite 4 ou 'left' para" +
-				" diminuir uma casa no eixo X\nFaça isso ate chegar na posição do " +
-				"alimento!!\n");
+		System.out.println("Seja bem-vindo ao jogo do robô!\n");
+		System.out.println("Regras do jogo:");
+		System.out.println("- Digite 1 ou 'up' para subir (Y + 1)");
+		System.out.println("- Digite 2 ou 'down' para descer (Y - 1)");
+		System.out.println("- Digite 3 ou 'right' para direita (X + 1)");
+		System.out.println("- Digite 4 ou 'left' para esquerda (X - 1)");
+		System.out.println("Faça isso até o robô encontrar o alimento!\n");
 		
-		System.out.println("Digite a cor do seu robo: ");
+		System.out.print("Digite a cor do seu robô: ");
 		String cor = teclado.nextLine();
-		Robo robo = new Robo(cor);
+		Robo roboNormal = new RoboNormal(cor);
 		
-		System.out.println("Escolha uma posição no eixo X para o alimento: ");
+		System.out.print("Escolha a posição X do alimento: ");
 		int posicaoXAlimento = teclado.nextInt();
 		
-		System.out.println("Escolha uma posição no eixo Y para o alimento: ");
+		System.out.print("Escolha a posição Y do alimento: ");
 		int posicaoYAlimento = teclado.nextInt();
 		teclado.nextLine();
 		
+		System.out.println("O robô começa na posição: (" + roboNormal.getPosicaoX() + ", " + roboNormal.getPosicaoY() + ")");
+		
 		boolean encontrou = false;
 		while (!encontrou) {
-			System.out.println("Digite a direção para mover o robô: ");
-			String direcao = teclado.nextLine();
+			System.out.print("Digite a direção (número ou texto): ");
+			String input = teclado.nextLine();
 			
 			try {
-				boolean mov = robo.moverRobo(direcao);
+				boolean mov;
+				
+				try {
+					int numero = Integer.parseInt(input);
+					mov = roboNormal.moverRobo(numero);
+				} catch (NumberFormatException e) {
+					mov = roboNormal.moverRobo(input.toLowerCase());
+				}
+				
 				if (!mov) {
-					System.out.println("Direção inválida! Use: up, down, left, right.");
+					System.out.println("Direção inválida! Use: 1-4 ou up/down/left/right.");
 				} else {
-					System.out.println("Robô na posição: (" + robo.getPosicaoX() + ", " + robo.getPosicaoY() + ")");
-					encontrou = robo.encontrarAlimento(posicaoXAlimento, posicaoYAlimento);
+					System.out.println("Robô na posição: (" + roboNormal.getPosicaoX() + ", " + roboNormal.getPosicaoY() + ")");
+					encontrou = roboNormal.encontrarAlimento(posicaoXAlimento, posicaoYAlimento);
 					if (encontrou) {
 						System.out.println("Parabéns! O robô encontrou o alimento!");
 					}
 				}
 			} catch (MovimentoInvalidoException e) {
-				System.out.println("Movimento inválido: " + e.getMessage());
-				System.out.println("Posição atual do robô: (" + robo.getPosicaoX() + ", " + robo.getPosicaoY() + ")");
+				System.out.println(e.getMessage());
+				System.out.println("Posição atual do robô: (" + roboNormal.getPosicaoX() + ", " + roboNormal.getPosicaoY() + ")");
 			}
 		}
 		

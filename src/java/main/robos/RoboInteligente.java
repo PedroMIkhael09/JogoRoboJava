@@ -8,19 +8,14 @@ import java.util.List;
 
 public class RoboInteligente extends Robo {
 	
-	private String ultimaDirecaoUsada;
-	
 	public RoboInteligente(String cor) {
 		super(cor);
 	}
 	
 	@Override
 	public boolean moverRobo(String direcao) {
-		ultimaDirecaoUsada = null;
 		try {
-			super.moverRobo(direcao);
-			ultimaDirecaoUsada = direcao;
-			return true;
+			return moverParaDirecao(direcao);
 		} catch (MovimentoInvalidoException e) {
 			List<String> direcoes = new ArrayList<>(Arrays.asList("up", "down", "left", "right"));
 			direcoes.remove(direcao);
@@ -28,19 +23,26 @@ public class RoboInteligente extends Robo {
 			
 			for (String novaDirecao : direcoes) {
 				try {
-					super.moverRobo(novaDirecao);
-					ultimaDirecaoUsada = novaDirecao;
-					return true;
+					return moverParaDirecao(novaDirecao);
 				} catch (MovimentoInvalidoException ignored) {
 				}
 			}
-			
 			movimentosInvalidos++;
 			return false;
 		}
 	}
 	
-	public String getUltimaDirecaoUsada() {
-		return ultimaDirecaoUsada;
+	@Override
+	public boolean moverRobo(int numero) throws MovimentoInvalidoException {
+		switch (numero) {
+			case 1: return moverParaDirecao("up");
+			case 2: return moverParaDirecao("down");
+			case 3: return moverParaDirecao("right");
+			case 4: return moverParaDirecao("left");
+			default:
+				movimentosInvalidos++;
+				return false;
+		}
 	}
+	
 }
