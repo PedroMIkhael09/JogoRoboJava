@@ -1,4 +1,4 @@
-package obstaculos;
+package main.obstaculos;
 
 public abstract class Obstaculo {
 	protected int posicaoX;

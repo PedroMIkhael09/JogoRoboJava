@@ -1,6 +1,6 @@
-package robos;
+package main.robos;
 
-import exception.MovimentoInvalidoException;
+import main.exception.MovimentoInvalidoException;
 import java.util.Random;
 import java.util.Arrays;
 import java.util.Collections;

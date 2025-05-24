@@ -1,8 +1,6 @@
-package obstaculos;
+package main.obstaculos;
 
-import obstaculos.Obstaculo;
-
-public class Rocha extends Obstaculo {
+public class Bomba extends Obstaculo {
 	@Override
 	public boolean bater(int posicaoXrobo, int posicaoYrobo) {
 		if (posicaoXrobo == posicaoX && posicaoYrobo == posicaoY) {

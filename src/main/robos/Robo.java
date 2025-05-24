@@ -1,6 +1,6 @@
-package robos;
+package main.robos;
 
-import exception.MovimentoInvalidoException;
+import main.exception.MovimentoInvalidoException;
 
 public abstract class Robo {
 	protected String cor;

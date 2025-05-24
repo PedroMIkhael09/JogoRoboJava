@@ -1,7 +1,9 @@
-import robos.Robo;
-import robos.RoboNormal;
-import exception.MovimentoInvalidoException;
-import robos.RoboInteligente;
+package main;
+
+import main.exception.MovimentoInvalidoException;
+import main.robos.Robo;
+import main.robos.RoboNormal;
+import main.robos.RoboInteligente;
 
 import java.util.Random;
 import java.util.Scanner;
