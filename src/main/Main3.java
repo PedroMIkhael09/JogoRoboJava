@@ -30,7 +30,7 @@ public class Main3 {
 			cor2 = teclado.nextLine();
 		}
 		
-		Robo roboInteligente = new RoboInteligente(cor2);
+		RoboInteligente roboInteligente = new RoboInteligente(cor2);
 		
 		System.out.print("Digite a posição X do alimento: ");
 		int alimentoX = teclado.nextInt();
@@ -72,35 +72,33 @@ public class Main3 {
 			}
 			
 			if (!roboInteligenteAchou) {
-				if (!roboInteligenteAchou) {
-					String direcao2 = direcoes[random.nextInt(4)];
-					boolean moveu = roboInteligente.moverRobo(direcao2);
-					
-					String direcaoUsada = ((RoboInteligente) roboInteligente).getUltimaDirecaoUsada();
-					
-					if (moveu) {
-						if (direcao2.equals(direcaoUsada)) {
-							System.out.println("Robô " + roboInteligente.getCor() + " moveu para " + direcaoUsada +
-									" Posição atual: (" + roboInteligente.getPosicaoX() + "," + roboInteligente.getPosicaoY() + ")");
-						} else {
-							System.out.println("Robô " + roboInteligente.getCor() + " tentou '" + direcao2 + "' (inválido), " +
-									"mas usou '" + direcaoUsada + "' no lugar. Essa direção inválida não será repetida.");
-							System.out.println("Nova posição: (" + roboInteligente.getPosicaoX() + "," + roboInteligente.getPosicaoY() + ")");
-						}
-					} else {
-						System.out.println("Robô " + roboInteligente.getCor() + " não conseguiu se mover em nenhuma direção válida.");
-					}
-					
-					if (roboInteligente.encontrarAlimento(alimentoX, alimentoY)) {
-						System.out.println("O robô " + roboInteligente.getCor() + " achou o alimento!");
-						roboInteligenteAchou = true;
-						if (vencedor == null) {
-							vencedor = roboInteligente;
-						}
-					}
-				}
-				
-			}
+                String direcao2 = direcoes[random.nextInt(4)];
+                boolean moveu = roboInteligente.moverRobo(direcao2);
+
+                String direcaoUsada = roboInteligente.getUltimaDirecaoUsada();
+
+                if (moveu) {
+                    if (direcao2.equals(direcaoUsada)) {
+                        System.out.println("Robô " + roboInteligente.getCor() + " moveu para " + direcaoUsada +
+                                " Posição atual: (" + roboInteligente.getPosicaoX() + "," + roboInteligente.getPosicaoY() + ")");
+                    } else {
+                        System.out.println("Robô " + roboInteligente.getCor() + " tentou '" + direcao2 + "' (inválido), " +
+                                "mas usou '" + direcaoUsada + "' no lugar. Essa direção inválida não será repetida.");
+                        System.out.println("Nova posição: (" + roboInteligente.getPosicaoX() + "," + roboInteligente.getPosicaoY() + ")");
+                    }
+                } else {
+                    System.out.println("Robô " + roboInteligente.getCor() + " não conseguiu se mover em nenhuma direção válida.");
+                }
+
+                if (roboInteligente.encontrarAlimento(alimentoX, alimentoY)) {
+                    System.out.println("O robô " + roboInteligente.getCor() + " achou o alimento!");
+                    roboInteligenteAchou = true;
+                    if (vencedor == null) {
+                        vencedor = roboInteligente;
+                    }
+                }
+
+            }
 			
 			if (roboNormalAchou && roboInteligenteAchou) {
 				break;
