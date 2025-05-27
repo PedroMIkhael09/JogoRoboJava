@@ -1,6 +1,6 @@
-package main.obstaculos;
+package main.model.obstaculos;
 
-import main.robos.Robo;
+import main.model.robos.Robo;
 
 public abstract class Obstaculo {
 	protected int posicaoX;

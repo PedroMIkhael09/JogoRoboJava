@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.controller.Main1Controller">
+    <top>
+        <VBox spacing="15.0" style="-fx-background-color: #f8f9fa; -fx-border-color: #dee2e6; -fx-border-width: 0 0 1 0; -fx-padding: 20;">
+            <children>
+                <!-- Título minimalista -->
+                <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="ROBÔ COLETOR DE ENERGIA" textAlignment="CENTER">
+                    <font>
+                        <Font name="Consolas" size="20.0" />
+                    </font>
+                    <style>
+                        -fx-text-fill: #212529;
+                        -fx-font-weight: bold;
+                    </style>
+                </Label>
+
+                <!-- Controles superiores -->
+                <HBox alignment="CENTER" spacing="20.0">
+                    <children>
+                        <Label text="COR DO ROBÔ:" textFill="#6c757d">
+                            <font>
+                                <Font name="Consolas" size="12.0" />
+                            </font>
+                        </Label>
+                        <ColorPicker fx:id="colorPicker" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: #6c757d; -fx-border-width: 1; -fx-border-radius: 4;" />
+                        <Button fx:id="iniciarButton" mnemonicParsing="false" onAction="#iniciarJogo" prefWidth="100.0" style="-fx-background-color: #495057; -fx-text-fill: white; -fx-border-radius: 4; -fx-background-radius: 4;" text="INICIAR">
+                            <font>
+                                <Font name="Consolas" size="11.0" />
+                            </font>
+                        </Button>
+                        <Button fx:id="resetButton" disable="true" mnemonicParsing="false" onAction="#resetarJogo" prefWidth="80.0" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-border-radius: 4; -fx-background-radius: 4;" text="RESET">
+                            <font>
+                                <Font name="Consolas" size="11.0" />
+                            </font>
+                        </Button>
+                    </children>
+                </HBox>
+
+                <!-- Labels de informação -->
+                <HBox alignment="CENTER" spacing="40.0">
+                    <children>
+                        <Label fx:id="posicaoLabel" text="POSIÇÃO: --" textFill="#6c757d">
+                            <font>
+                                <Font name="Consolas" size="11.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="movimentosLabel" text="MOVIMENTOS: 0" textFill="#6c757d">
+                            <font>
+                                <Font name="Consolas" size="11.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" style="-fx-background-color: #ffffff; -fx-padding: 30;">
+            <children>
+                <GridPane fx:id="gridPane" alignment="CENTER" hgap="6.0" vgap="6.0" style="-fx-background-color: #f8f9fa; -fx-border-color: #dee2e6; -fx-border-width: 2; -fx-border-radius: 8; -fx-background-radius: 8;">
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                    </padding>
+                </GridPane>
+            </children>
+        </VBox>
+    </center>
+
+    <bottom>
+        <VBox alignment="CENTER" spacing="20.0" style="-fx-background-color: #f8f9fa; -fx-border-color: #dee2e6; -fx-border-width: 1 0 0 0; -fx-padding: 20;">
+            <children>
+                <!-- Botões direcionais minimalistas -->
+                <VBox alignment="CENTER" spacing="10.0">
+                    <children>
+                        <Label text="CONTROLES DIRECIONAIS" textAlignment="CENTER" textFill="#495057">
+                            <font>
+                                <Font name="Consolas" size="12.0" />
+                            </font>
+                        </Label>
+                        <GridPane alignment="CENTER" hgap="8.0" vgap="8.0">
+                            <children>
+                                <Button mnemonicParsing="false" onAction="#moverUp" prefHeight="35.0" prefWidth="50.0" style="-fx-background-color: white; -fx-border-color: #6c757d; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;" text="↑" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                    <font>
+                                        <Font name="Consolas" size="16.0" />
+                                    </font>
+                                </Button>
+                                <Button mnemonicParsing="false" onAction="#moverLeft" prefHeight="35.0" prefWidth="50.0" style="-fx-background-color: white; -fx-border-color: #6c757d; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;" text="←" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                    <font>
+                                        <Font name="Consolas" size="16.0" />
+                                    </font>
+                                </Button>
+                                <Button mnemonicParsing="false" onAction="#moverRight" prefHeight="35.0" prefWidth="50.0" style="-fx-background-color: white; -fx-border-color: #6c757d; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;" text="→" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                    <font>
+                                        <Font name="Consolas" size="16.0" />
+                                    </font>
+                                </Button>
+                                <Button mnemonicParsing="false" onAction="#moverDown" prefHeight="35.0" prefWidth="50.0" style="-fx-background-color: white; -fx-border-color: #6c757d; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;" text="↓" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                    <font>
+                                        <Font name="Consolas" size="16.0" />
+                                    </font>
+                                </Button>
+                            </children>
+                        </GridPane>
+                    </children>
+                </VBox>
+
+                <!-- Input de comandos -->
+                <VBox alignment="CENTER" spacing="8.0">
+                    <children>
+                        <Label text="COMANDOS up (1), down (2), left (3) , right(4) " textAlignment="CENTER" textFill="#495057">
+                            <font>
+                                <Font name="Consolas" size="12.0" />
+                            </font>
+                        </Label>
+                        <HBox alignment="CENTER" spacing="10.0">
+                            <children>
+                                <Label text="INPUT:" textFill="#6c757d">
+                                    <font>
+                                        <Font name="Consolas" size="11.0" />
+                                    </font>
+                                </Label>
+                                <TextField fx:id="direcaoInput" prefWidth="180.0" promptText="up, down, left, right" style="-fx-background-color: white; -fx-border-color: #6c757d; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;">
+                                    <font>
+                                        <Font name="Consolas" size="11.0" />
+                                    </font>
+                                </TextField>
+                                <Button mnemonicParsing="false" onAction="#moverTexto" prefWidth="80.0" style="-fx-background-color: #343a40; -fx-text-fill: white; -fx-border-radius: 4; -fx-background-radius: 4;" text="EXEC">
+                                    <font>
+                                        <Font name="Consolas" size="11.0" />
+                                    </font>
+                                </Button>
+                            </children>
+                        </HBox>
+                        <Label text="Separe comandos por vírgula" textFill="#adb5bd">
+                            <font>
+                                <Font name="Consolas" size="9.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+
+                <Label fx:id="statusLabel" alignment="CENTER" maxWidth="1.7976931348623157E308" style="-fx-background-color: white; -fx-border-color: #dee2e6; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4; -fx-padding: 12;" text="🤖 Configure o robô e inicie o jogo" textAlignment="CENTER" wrapText="true">
+                    <font>
+                        <Font name="Consolas" size="12.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+    </bottom>
+</BorderPane>

@@ -1,6 +1,6 @@
 package main;
 
-import main.robos.Robo;
+import main.model.robos.Robo;
 import main.exception.MovimentoInvalidoException;
 import java.util.Random;
 import java.util.Scanner;

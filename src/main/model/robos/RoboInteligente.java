@@ -1,4 +1,4 @@
-package main.robos;
+package main.model.robos;
 
 import main.exception.MovimentoInvalidoException;
 import java.util.ArrayList;

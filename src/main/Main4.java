@@ -1,11 +1,11 @@
 package main;
 
 import main.exception.MovimentoInvalidoException;
-import main.obstaculos.Bomba;
-import main.obstaculos.Obstaculo;
-import main.obstaculos.Rocha;
-import main.robos.Robo;
-import main.robos.RoboInteligente;
+import main.model.obstaculos.Bomba;
+import main.model.obstaculos.Obstaculo;
+import main.model.obstaculos.Rocha;
+import main.model.robos.Robo;
+import main.model.robos.RoboInteligente;
 
 import java.util.ArrayList;
 import java.util.List;

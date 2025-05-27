@@ -1,4 +1,4 @@
-package main.robos;
+package main.model.robos;
 
 import main.exception.MovimentoInvalidoException;
 
@@ -73,6 +73,36 @@ public class Robo {
 				throw new MovimentoInvalidoException("Número inválido: " + numero);
 		}
 	}
+	public boolean tentarMover(String direcao) throws MovimentoInvalidoException {
+		int novoX = posicaoX;
+		int novoY = posicaoY;
+
+		switch (direcao.toLowerCase()) {
+			case "up":
+				novoY++;
+				break;
+			case "down":
+				novoY--;
+				break;
+			case "left":
+				novoX--;
+				break;
+			case "right":
+				novoX++;
+				break;
+		}
+
+		// Verifica se a nova posição está dentro do tabuleiro 4x4 (0-3)
+		if (novoX < 0 || novoX > 3 || novoY < 0 || novoY > 3) {
+			movimentosInvalidos++;
+			return false; // Movimento inválido, perde a vez
+		}
+
+		posicaoX = novoX;
+		posicaoY = novoY;
+		movimentosValidos++;
+		return true;
+	}
 	
 	public boolean encontrarAlimento(int posicaoXAlimento, int posicaoYAlimento) {
 		return posicaoX == posicaoXAlimento && posicaoY == posicaoYAlimento;
@@ -130,7 +160,10 @@ public class Robo {
 	public void setMovimentosInvalidos(int movimentosInvalidos) {
 		this.movimentosInvalidos = movimentosInvalidos;
 	}
-	
+	public void setMovimentosValidos(int movimentosValidos) {
+		this.movimentosValidos = movimentosValidos;
+	}
+
 	public void setCor(String cor) {
 		this.cor = cor;
 	}

@@ -1,8 +1,8 @@
 package main;
 
 import main.exception.MovimentoInvalidoException;
-import main.robos.Robo;
-import main.robos.RoboInteligente;
+import main.model.robos.Robo;
+import main.model.robos.RoboInteligente;
 
 import java.util.Random;
 import java.util.Scanner;

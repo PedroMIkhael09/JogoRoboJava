@@ -1,7 +1,7 @@
 package main;
 
 import main.exception.MovimentoInvalidoException;
-import main.robos.Robo;
+import main.model.robos.Robo;
 
 import java.util.Scanner;
 
