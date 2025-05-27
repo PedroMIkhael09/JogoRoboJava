@@ -2,136 +2,206 @@ package main;
 
 import main.exception.MovimentoInvalidoException;
 import main.obstaculos.Bomba;
+import main.obstaculos.Obstaculo;
 import main.obstaculos.Rocha;
-import main.robos.RoboNormal;
+import main.robos.Robo;
+import main.robos.RoboInteligente;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main4 {
-
-    public static void main(String[] args) {
-
+    
+    public static void main(String[] args) throws InterruptedException {
         Scanner sc = new Scanner(System.in);
-
-        // Criar robô
-        System.out.println("Digite a cor do robo:");
-        String cor = sc.nextLine();
-        RoboNormal robo = new RoboNormal(cor);
-
-        // Definir posição do alimento
+        Random random = new Random();
+        
+        System.out.println("Digite a cor do primeiro robô:");
+        String cor1 = sc.nextLine().toLowerCase();
+        Robo roboNormal = new Robo(cor1);
+        
+        System.out.println("Digite a cor do segundo robô (inteligente):");
+        String cor2 = sc.nextLine().toLowerCase();
+        while (cor2.equalsIgnoreCase(cor1)) {
+            System.out.println("Essa cor já foi usada. Digite uma cor diferente:");
+            cor2 = sc.nextLine().toLowerCase();
+        }
+        RoboInteligente roboInteligente = new RoboInteligente(cor2);
+        
         System.out.println("Digite a posição X do alimento:");
         int alimentoX = sc.nextInt();
         System.out.println("Digite a posição Y do alimento:");
         int alimentoY = sc.nextInt();
-
-        // Listas de obstáculos
-        List<Rocha> rochas = new ArrayList<>();
-        List<Bomba> bombas = new ArrayList<>();
-
-        // Adicionar Rochas
+        
+        List<Obstaculo> obstaculos = new ArrayList<>();
+        
         System.out.println("Quantas rochas deseja adicionar?");
-        int quantidadeRochas = sc.nextInt();
-
-        for (int i = 0; i < quantidadeRochas; i++) {
+        int qtdRochas = sc.nextInt();
+        for (int i = 0; i < qtdRochas; i++) {
             System.out.println("Posição X da rocha " + (i + 1) + ":");
             int x = sc.nextInt();
             System.out.println("Posição Y da rocha " + (i + 1) + ":");
             int y = sc.nextInt();
-            rochas.add(new Rocha(x, y));
+            obstaculos.add(new Rocha(x, y));
         }
-
-        // Adicionar Bombas
+        
         System.out.println("Quantas bombas deseja adicionar?");
-        int quantidadeBombas = sc.nextInt();
-
-        for (int i = 0; i < quantidadeBombas; i++) {
+        int qtdBombas = sc.nextInt();
+        for (int i = 0; i < qtdBombas; i++) {
             System.out.println("Posição X da bomba " + (i + 1) + ":");
             int x = sc.nextInt();
             System.out.println("Posição Y da bomba " + (i + 1) + ":");
             int y = sc.nextInt();
-            bombas.add(new Bomba(x, y));
+            obstaculos.add(new Bomba(x, y));
         }
-
-        sc.nextLine(); // Consumir quebra de linha pendente
-
-        // Variáveis para guardar a posição anterior
-        int posAnteriorX = robo.getPosicaoX();
-        int posAnteriorY = robo.getPosicaoY();
-
-        // Loop de movimentação
+        
+        sc.nextLine();
+        
+        System.out.println();
+        System.out.println("Jogo iniciado!");
+        System.out.println("Robô " + roboNormal.getCor() + " começa na posição (0, 0)");
+        System.out.println("Robô " + roboInteligente.getCor() + " começa na posição (0, 0)");
+        
+        boolean alimentoEncontrado = false;
+        boolean roboNormalAtivo = true;
+        boolean roboInteligenteAtivo = true;
+        
+        String[] direcoes = {"up", "down", "left", "right"};
+        
         while (true) {
-            System.out.println("\nPosição atual do robo: (" + robo.getPosicaoX() + ", " + robo.getPosicaoY() + ")");
-            System.out.println("Digite a direção para mover (up, down, left, right) ou 'sair' para encerrar:");
-            String direcao = sc.nextLine();
-
-            if (direcao.equalsIgnoreCase("sair")) {
+            if (roboNormalAtivo && !alimentoEncontrado) {
+                System.out.println();
+                System.out.println("Robô " + roboNormal.getCor() + " está na posição (" + roboNormal.getPosicaoX() + ", " + roboNormal.getPosicaoY() + ")");
+                
+                String direcao = direcoes[random.nextInt(4)];
+                int posAnteriorX = roboNormal.getPosicaoX();
+                int posAnteriorY = roboNormal.getPosicaoY();
+                
+                try {
+                    boolean moveu = roboNormal.mover(direcao);
+                    
+                    if (moveu) {
+                        
+                        Obstaculo obstaculoParaRemover = null;
+                        
+                        for (Obstaculo o : obstaculos) {
+                            if (roboNormal.getPosicaoX() == o.getPosicaoX() &&
+                                    roboNormal.getPosicaoY() == o.getPosicaoY()) {
+                                
+                                o.bater(roboNormal);
+                                
+                                if (o instanceof Bomba) {
+                                    System.out.println("💥 Robô " + roboNormal.getCor() + " explodiu ao bater na BOMBA em (" + o.getPosicaoX() + ", " + o.getPosicaoY() + ")");
+                                    obstaculoParaRemover = o;
+                                    roboNormalAtivo = false;
+                                    Thread.sleep(2000);
+                                } else if (o instanceof Rocha) {
+                                    System.out.println("⚠️ Robô " + roboNormal.getCor() + " bateu em uma ROCHA em (" + o.getPosicaoX() + ", " + o.getPosicaoY() + ") e voltou para a posição anterior.");
+                                    roboNormal.setPosicaoX(posAnteriorX);
+                                    roboNormal.setPosicaoY(posAnteriorY);
+                                    Thread.sleep(2000);
+                                }
+                                
+                                break;
+                            }
+                        }
+                        
+                        if (obstaculoParaRemover != null) {
+                            obstaculos.remove(obstaculoParaRemover);
+                        }
+                        
+                        if (roboNormal.encontrarAlimento(alimentoX, alimentoY)) {
+                            System.out.println("Robô " + roboNormal.getCor() + " encontrou o alimento em (" + alimentoX + ", " + alimentoY + ")");
+                            alimentoEncontrado = true;
+                            Thread.sleep(2000);
+                        } else if (roboNormalAtivo) {
+                            System.out.println("Robô " + roboNormal.getCor() + " moveu para (" + roboNormal.getPosicaoX() + ", " + roboNormal.getPosicaoY() + ") na direção " + direcao);
+                        }
+                    }
+                } catch (MovimentoInvalidoException e) {
+                    System.out.println("Robô " + roboNormal.getCor() + " tentou movimento inválido: " + e.getMessage());
+                }
+                
+                Thread.sleep(2000);
+            }
+            
+            if (alimentoEncontrado || (!roboNormalAtivo && !roboInteligenteAtivo)) {
                 break;
             }
-
-            try {
-                // Guardar posição atual antes de mover
-                posAnteriorX = robo.getPosicaoX();
-                posAnteriorY = robo.getPosicaoY();
-
-                boolean moveu = robo.moverRobo(direcao);
-
+            
+            if (roboInteligenteAtivo && !alimentoEncontrado) {
+                System.out.println();
+                System.out.println("Robô " + roboInteligente.getCor() + " está na posição (" + roboInteligente.getPosicaoX() + ", " + roboInteligente.getPosicaoY() + ")");
+                
+                String direcaoAleatoria = direcoes[random.nextInt(4)];
+                int posAnteriorX = roboInteligente.getPosicaoX();
+                int posAnteriorY = roboInteligente.getPosicaoY();
+                
+                boolean moveu = roboInteligente.mover(direcaoAleatoria);
+                
                 if (moveu) {
-                    // Verificar colisão com rochas
-                    boolean bateuRocha = false;
-                    for (Rocha rocha : rochas) {
-                        if (robo.getPosicaoX() == rocha.getPosicaoX() && robo.getPosicaoY() == rocha.getPosicaoY()) {
-                            System.out.println("⚠️ Robo bateu em uma ROCHA na posição (" + rocha.getPosicaoX() + ", " + rocha.getPosicaoY() + ")!");
-                            // Voltar para a posição anterior
-                            robo.setPosicaoX(posAnteriorX);
-                            robo.setPosicaoY(posAnteriorY);
-                            System.out.println("↩️ Robo voltou para a posição anterior: (" + posAnteriorX + ", " + posAnteriorY + ")");
-                            bateuRocha = true;
+                    
+                    Obstaculo obstaculoParaRemover = null;
+                    
+                    for (Obstaculo o : obstaculos) {
+                        if (roboInteligente.getPosicaoX() == o.getPosicaoX() &&
+                                roboInteligente.getPosicaoY() == o.getPosicaoY()) {
+                            
+                            o.bater(roboInteligente);
+                            
+                            if (o instanceof Bomba) {
+                                System.out.println("💥 Robô " + roboInteligente.getCor() + " explodiu ao bater na BOMBA em (" + o.getPosicaoX() + ", " + o.getPosicaoY() + ")");
+                                obstaculoParaRemover = o;
+                                roboInteligenteAtivo = false;
+                                Thread.sleep(2000);
+                            } else if (o instanceof Rocha) {
+                                System.out.println("⚠️ Robô " + roboInteligente.getCor() + " bateu em uma ROCHA em (" + o.getPosicaoX() + ", " + o.getPosicaoY() + ") e voltou para a posição anterior.");
+                                roboInteligente.setPosicaoX(posAnteriorX);
+                                roboInteligente.setPosicaoY(posAnteriorY);
+                                Thread.sleep(2000);
+                            }
+                            
                             break;
                         }
                     }
-
-                    // Se bateu em rocha, pular as outras verificações
-                    if (bateuRocha) {
-                        continue;
+                    
+                    if (obstaculoParaRemover != null) {
+                        obstaculos.remove(obstaculoParaRemover);
                     }
-
-                    // Verificar colisão com bombas
-                    boolean bateuBomba = false;
-                    for (Bomba bomba : bombas) {
-                        if (robo.getPosicaoX() == bomba.getPosicaoX() && robo.getPosicaoY() == bomba.getPosicaoY()) {
-                            System.out.println("💥 Robo EXPLODIU em uma BOMBA na posição (" + bomba.getPosicaoX() + ", " + bomba.getPosicaoY() + ")!");
-                            bateuBomba = true;
-                            break;
-                        }
+                    
+                    if (roboInteligente.encontrarAlimento(alimentoX, alimentoY)) {
+                        System.out.println("Robô " + roboInteligente.getCor() + " encontrou o alimento em (" + alimentoX + ", " + alimentoY + ")");
+                        alimentoEncontrado = true;
+                        Thread.sleep(2000);
+                    } else if (roboInteligenteAtivo) {
+                        System.out.println("Robô " + roboInteligente.getCor() + " moveu para (" + roboInteligente.getPosicaoX() + ", " + roboInteligente.getPosicaoY() + ") na direção " + direcaoAleatoria);
                     }
-
-                    // Verificar se encontrou o alimento
-                    if (robo.encontrarAlimento(alimentoX, alimentoY)) {
-                        System.out.println("🍎 O robo encontrou o ALIMENTO na posição (" + alimentoX + ", " + alimentoY + ")!");
-                        break;
-                    }
-
-                    if (bateuBomba) {
-                        System.out.println("❌ Fim de jogo! O robo foi destruído.");
-                        break;
-                    }
-
                 } else {
-                    System.out.println("❌ Direção inválida.");
+                    System.out.println("Robô " + roboInteligente.getCor() + " não conseguiu se mover em nenhuma direção válida.");
                 }
-
-            } catch (MovimentoInvalidoException e) {
-                System.out.println("❌ Movimento inválido para a direção: " + e.getMessage());
+                
+                Thread.sleep(2000);
+            }
+            
+            if (alimentoEncontrado || (!roboNormalAtivo && !roboInteligenteAtivo)) {
+                break;
             }
         }
-
-        // Estatísticas finais
-        System.out.println("\n📊 Estatísticas do Robo:");
-        System.out.println("Movimentos válidos: " + robo.getMovimentosValidos());
-        System.out.println("Movimentos inválidos: " + robo.getMovimentosInvalidos());
-        System.out.println("Última direção usada: " + robo.getUltimaDirecaoUsada());
-        System.out.println("Posição final do robo: (" + robo.getPosicaoX() + ", " + robo.getPosicaoY() + ")");
+        
+        System.out.println();
+        System.out.println("=== FIM DO JOGO ===");
+        if (alimentoEncontrado) {
+            System.out.println("Alimento foi encontrado!");
+        } else {
+            System.out.println("Nenhum robô conseguiu encontrar o alimento.");
+        }
+        
+        System.out.println("Robô " + roboNormal.getCor() + " está " + (roboNormalAtivo ? "ativo" : "destruído") +
+                ". Movimentos válidos: " + roboNormal.getMovimentosValidos() + ", inválidos: " + roboNormal.getMovimentosInvalidos());
+        
+        System.out.println("Robô " + roboInteligente.getCor() + " está " + (roboInteligenteAtivo ? "ativo" : "destruído") +
+                ". Movimentos válidos: " + roboInteligente.getMovimentosValidos() + ", inválidos: " + roboInteligente.getMovimentosInvalidos());
     }
 }

@@ -2,7 +2,6 @@ package main;
 
 import main.exception.MovimentoInvalidoException;
 import main.robos.Robo;
-import main.robos.RoboNormal;
 import main.robos.RoboInteligente;
 
 import java.util.Random;
@@ -20,7 +19,7 @@ public class Main3 {
 		
 		System.out.print("Digite a cor do primeiro robô: ");
 		String cor1 = teclado.nextLine().toLowerCase();
-		Robo roboNormal = new RoboNormal(cor1);
+		Robo roboNormal = new Robo(cor1);
 		
 		System.out.println("Digite a cor do segundo robô:");
 		String cor2 = teclado.nextLine().toLowerCase();
@@ -37,10 +36,11 @@ public class Main3 {
 		System.out.print("Digite a posição Y do alimento: ");
 		int alimentoY = teclado.nextInt();
 		
-		System.out.println("O robo Normal começa na posição: (" + roboNormal.getPosicaoX() + ", " + roboNormal.getPosicaoY() + "");
+		System.out.println("------JOGO INICIADO------");
+		System.out.println("O robo Normal começa na posição: (" + roboNormal.getPosicaoX() +  ", " + roboNormal.getPosicaoY() + ")");
 		
 		System.out.println("O robo Inteligente começa na posição: (" + roboInteligente.getPosicaoX() +
-				", " + roboInteligente.getPosicaoY() + "");
+				", " + roboInteligente.getPosicaoY() + ")");
 		Robo vencedor = null;
 		boolean roboNormalAchou = false;
 		boolean roboInteligenteAchou = false;
@@ -50,7 +50,7 @@ public class Main3 {
 			if (!roboNormalAchou) {
 				String direcao1 = direcoes[random.nextInt(4)];
 				try {
-					roboNormal.moverRobo(direcao1);
+					roboNormal.mover(direcao1);
 					System.out.println("Robô " + roboNormal.getCor() + " moveu para " + direcao1 +
 							" Posição atual: (" + roboNormal.getPosicaoX() + "," + roboNormal.getPosicaoY() + ")");
 				} catch (MovimentoInvalidoException e) {
@@ -73,7 +73,7 @@ public class Main3 {
 			
 			if (!roboInteligenteAchou) {
                 String direcao2 = direcoes[random.nextInt(4)];
-                boolean moveu = roboInteligente.moverRobo(direcao2);
+                boolean moveu = roboInteligente.mover(direcao2);
 
                 String direcaoUsada = roboInteligente.getUltimaDirecaoUsada();
 
@@ -110,6 +110,7 @@ public class Main3 {
 			}
 		}
 		
+		System.out.println("=== FIM DO JOGO ===");
 		System.out.println("\nO robô vencedor foi o de cor: " + vencedor.getCor());
 		System.out.println("Movimentos do robô " + roboNormal.getCor() + ": válidos = " + roboNormal.getMovimentosValidos() +
 				", inválidos = " + roboNormal.getMovimentosInvalidos());
