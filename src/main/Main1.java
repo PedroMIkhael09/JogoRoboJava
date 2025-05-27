@@ -2,7 +2,6 @@ package main;
 
 import main.exception.MovimentoInvalidoException;
 import main.robos.Robo;
-import main.robos.RoboNormal;
 
 import java.util.Scanner;
 
@@ -20,7 +19,7 @@ public class Main1 {
 		
 		System.out.print("Digite a cor do seu robô: ");
 		String cor = teclado.nextLine();
-		Robo roboNormal = new RoboNormal(cor);
+		Robo roboNormal = new Robo(cor);
 		
 		System.out.print("Escolha a posição X do alimento: ");
 		int posicaoXAlimento = teclado.nextInt();
@@ -29,6 +28,7 @@ public class Main1 {
 		int posicaoYAlimento = teclado.nextInt();
 		teclado.nextLine();
 		
+		System.out.println("------JOGO INICIADO------");
 		System.out.println("O robô começa na posição: (" + roboNormal.getPosicaoX() + ", " + roboNormal.getPosicaoY() + ")");
 		
 		boolean encontrou = false;
@@ -41,9 +41,9 @@ public class Main1 {
 				
 				try {
 					int numero = Integer.parseInt(input);
-					mov = roboNormal.moverRobo(numero);
+					mov = roboNormal.mover(numero);
 				} catch (NumberFormatException e) {
-					mov = roboNormal.moverRobo(input.toLowerCase());
+					mov = roboNormal.mover(input.toLowerCase());
 				}
 				
 				if (!mov) {
@@ -52,6 +52,7 @@ public class Main1 {
 					System.out.println("Robô na posição: (" + roboNormal.getPosicaoX() + ", " + roboNormal.getPosicaoY() + ")");
 					encontrou = roboNormal.encontrarAlimento(posicaoXAlimento, posicaoYAlimento);
 					if (encontrou) {
+						System.out.println("=== FIM DO JOGO ===");
 						System.out.println("Parabéns! O robô encontrou o alimento!");
 					}
 				}
