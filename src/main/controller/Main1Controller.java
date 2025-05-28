@@ -43,7 +43,7 @@ public class Main1Controller {
     private boolean jogoIniciado = false;
     private boolean jogoCompleto = false;
 
-    // a bct dessas cor
+    
     private final Color COR_FUNDO = Color.web("#f8f9fa");
     private final Color COR_BORDA = Color.web("#6c757d");
     private final Color COR_CELULA = Color.web("#ffffff");

@@ -18,6 +18,7 @@ public class RoboInteligente extends Robo {
 	public boolean mover(String direcao) {
 		String direcaoTentada = direcao.toLowerCase();
 		
+		// Se a direção já foi marcada como impossível (posição negativa), nem tenta
 		if (direcoesInvalidas.contains(direcaoTentada)) {
 			movimentosInvalidos++;
 			return tentarOutrasDirecoes(direcaoTentada);
@@ -25,8 +26,17 @@ public class RoboInteligente extends Robo {
 		
 		try {
 			boolean sucesso = super.mover(direcaoTentada);
-			return sucesso;
+			
+			if (sucesso) {
+				// Movimento bem-sucedido
+				return true;
+			} else {
+				// Movimento para fora dos limites (acima de 3), tenta outra direção, mas não marca como inválida
+				return tentarOutrasDirecoes(direcaoTentada);
+			}
+			
 		} catch (MovimentoInvalidoException e) {
+			// Movimento inválido (posição negativa), registra como direção proibida
 			direcoesInvalidas.add(direcaoTentada);
 			movimentosInvalidos++;
 			return tentarOutrasDirecoes(direcaoTentada);
@@ -42,14 +52,19 @@ public class RoboInteligente extends Robo {
 		for (String novaDirecao : direcoesPossiveis) {
 			try {
 				boolean sucesso = super.mover(novaDirecao);
+				
 				if (sucesso) {
 					return true;
 				}
+				// Se não for sucesso (passou do limite superior), tenta outra
+				// Mas não marca como inválida, porque não é erro crítico
+				
 			} catch (MovimentoInvalidoException e) {
 				direcoesInvalidas.add(novaDirecao);
 				movimentosInvalidos++;
 			}
 		}
+		// Não conseguiu se mover
 		return false;
 	}
 	

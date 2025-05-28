@@ -27,56 +27,9 @@ public class Robo {
 		posicaoAnteriorX = posicaoX;
 		posicaoAnteriorY = posicaoY;
 		
-		switch (direcao.toLowerCase()) {
-			case "up":
-				posicaoY++;
-				movimentosValidos++;
-				ultimaDirecaoUsada = "up";
-				return true;
-			case "down":
-				if (posicaoY - 1 < 0) {
-					movimentosInvalidos++;
-					throw new MovimentoInvalidoException("Movimento inválido: down");
-				}
-				posicaoY--;
-				movimentosValidos++;
-				ultimaDirecaoUsada = "down";
-				return true;
-			case "left":
-				if (posicaoX - 1 < 0) {
-					movimentosInvalidos++;
-					throw new MovimentoInvalidoException("Movimento inválido: left");
-				}
-				posicaoX--;
-				movimentosValidos++;
-				ultimaDirecaoUsada = "left";
-				return true;
-			case "right":
-				posicaoX++;
-				movimentosValidos++;
-				ultimaDirecaoUsada = "right";
-				return true;
-			default:
-				movimentosInvalidos++;
-				throw new MovimentoInvalidoException("Direção inválida: " + direcao);
-		}
-	}
-	
-	public boolean mover(int numero) throws MovimentoInvalidoException {
-		switch (numero) {
-			case 1: return mover("up");
-			case 2: return mover("down");
-			case 3: return mover("right");
-			case 4: return mover("left");
-			default:
-				movimentosInvalidos++;
-				throw new MovimentoInvalidoException("Número inválido: " + numero);
-		}
-	}
-	public boolean tentarMover(String direcao) throws MovimentoInvalidoException {
 		int novoX = posicaoX;
 		int novoY = posicaoY;
-
+		
 		switch (direcao.toLowerCase()) {
 			case "up":
 				novoY++;
@@ -90,19 +43,46 @@ public class Robo {
 			case "right":
 				novoX++;
 				break;
+			default:
+				movimentosInvalidos++;
+				throw new MovimentoInvalidoException("Direção inválida: " + direcao);
 		}
-
-		// Verifica se a nova posição está dentro do tabuleiro 4x4 (0-3)
-		if (novoX < 0 || novoX > 3 || novoY < 0 || novoY > 3) {
+		
+		
+		if (novoX < 0 || novoY < 0) {
 			movimentosInvalidos++;
-			return false; // Movimento inválido, perde a vez
+			throw new MovimentoInvalidoException("Movimento inválido (posição negativa): " + direcao);
 		}
-
+		
+		
+		if (novoX > 3 || novoY > 3) {
+			movimentosInvalidos++;
+			return false;
+		}
+		
+		
 		posicaoX = novoX;
 		posicaoY = novoY;
 		movimentosValidos++;
+		ultimaDirecaoUsada = direcao.toLowerCase();
+		
 		return true;
 	}
+	
+	
+	
+	public boolean mover(int numero) throws MovimentoInvalidoException {
+		switch (numero) {
+			case 1: return mover("up");
+			case 2: return mover("down");
+			case 3: return mover("left");
+			case 4: return mover("right");
+			default:
+				movimentosInvalidos++;
+				throw new MovimentoInvalidoException("Número inválido: " + numero);
+		}
+	}
+	
 	
 	public boolean encontrarAlimento(int posicaoXAlimento, int posicaoYAlimento) {
 		return posicaoX == posicaoXAlimento && posicaoY == posicaoYAlimento;

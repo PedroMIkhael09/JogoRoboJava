@@ -14,6 +14,7 @@ import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
+import main.exception.MovimentoInvalidoException;
 import main.model.robos.Robo;
 import main.model.robos.RoboInteligente;
 
@@ -435,70 +436,42 @@ public class Main4Controller {
     private boolean movimentoValido(int x, int y) {
         return x >= 0 && x < tamanho && y >= 0 && y < tamanho;
     }
-
+    
     private void moverRoboNormal() {
         String direcao = direcoes[random.nextInt(4)];
-        int oldX = roboNormal.getPosicaoX();
-        int oldY = roboNormal.getPosicaoY();
-        int newX = oldX;
-        int newY = oldY;
-
-        switch (direcao) {
-            case "up": newY++; break;
-            case "down": newY--; break;
-            case "left": newX--; break;
-            case "right": newX++; break;
-        }
-
-        if (movimentoValido(newX, newY)) {
-            roboNormal.setPosicaoX(newX);
-            roboNormal.setPosicaoY(newY);
-            roboNormal.setMovimentosValidos(roboNormal.getMovimentosValidos() + 1);
+        try {
+            roboNormal.mover(direcao);
             statusLabel.setText("Robô Normal " + roboNormal.getCor() + " moveu para " + direcao);
             statusLabel.setTextFill(COR_TEXTO_PRINCIPAL);
-
-            verificarObstaculo(roboNormal, oldX, oldY);
-
+            
             if (roboNormal.encontrarAlimento(alimentoX, alimentoY)) {
                 roboNormalAchou = true;
             }
-        } else {
-            roboNormal.setMovimentosInvalidos(roboNormal.getMovimentosInvalidos() + 1);
-            statusLabel.setText("Robô Normal " + roboNormal.getCor() + " tentou sair do tabuleiro!");
+        } catch (MovimentoInvalidoException e) {
+            statusLabel.setText("Robô Normal " + roboNormal.getCor() + " tentou movimento inválido: " + e.getMessage());
             statusLabel.setTextFill(COR_ERRO);
         }
     }
-
+    
     private void moverRoboInteligente() {
         String direcao = direcoes[random.nextInt(4)];
-        int oldX = roboInteligente.getPosicaoX();
-        int oldY = roboInteligente.getPosicaoY();
-        int newX = oldX;
-        int newY = oldY;
-
-        switch (direcao) {
-            case "up": newY++; break;
-            case "down": newY--; break;
-            case "left": newX--; break;
-            case "right": newX++; break;
-        }
-
-        if (movimentoValido(newX, newY)) {
-            roboInteligente.setPosicaoX(newX);
-            roboInteligente.setPosicaoY(newY);
-            roboInteligente.setMovimentosValidos(roboInteligente.getMovimentosValidos() + 1);
-            statusLabel.setText("Robô Inteligente " + roboInteligente.getCor() + " moveu para " + direcao);
-            statusLabel.setTextFill(COR_TEXTO_PRINCIPAL);
-
-            verificarObstaculo(roboInteligente, oldX, oldY);
-
-            if (roboInteligente.encontrarAlimento(alimentoX, alimentoY)) {
-                roboInteligenteAchou = true;
+        try {
+            boolean moveu = roboInteligente.mover(direcao);
+            
+            if (moveu) {
+                statusLabel.setText("Robô Inteligente " + roboInteligente.getCor() + " moveu para " + direcao);
+                statusLabel.setTextFill(COR_TEXTO_PRINCIPAL);
+                
+                if (roboInteligente.encontrarAlimento(alimentoX, alimentoY)) {
+                    roboInteligenteAchou = true;
+                }
+            } else {
+                statusLabel.setText("Robô Inteligente " + roboInteligente.getCor() + " evitou movimento inválido");
+                statusLabel.setTextFill(COR_SUCESSO);
             }
-        } else {
-            roboInteligente.setMovimentosInvalidos(roboInteligente.getMovimentosInvalidos() + 1);
-            statusLabel.setText("Robô Inteligente " + roboInteligente.getCor() + " evitou sair do tabuleiro!");
-            statusLabel.setTextFill(COR_SUCESSO);
+        } catch (MovimentoInvalidoException e) {
+            statusLabel.setText("Robô Inteligente " + roboInteligente.getCor() + ": " + e.getMessage());
+            statusLabel.setTextFill(COR_ERRO);
         }
     }
 

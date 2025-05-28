@@ -249,7 +249,7 @@ public class Main2Controller {
         String direcao = direcoes[random.nextInt(4)];
 
         try {
-            boolean movimentoRealizado = robo.tentarMover(direcao);
+            boolean movimentoRealizado = robo.mover(direcao);
 
             if (movimentoRealizado) {
                 statusLabel.setText("Robô " + robo.getCor() + " moveu para " + direcao);

@@ -285,21 +285,21 @@ public class Main3Controller {
             statusLabel.setTextFill(COR_ERRO);
         }
     }
-
+    
     private void moverRoboInteligente() {
         String direcao = direcoes[random.nextInt(4)];
         try {
             boolean moveu = roboInteligente.mover(direcao);
-
+            
             if (moveu) {
                 statusLabel.setText("Robô Inteligente " + roboInteligente.getCor() + " moveu para " + direcao);
                 statusLabel.setTextFill(COR_TEXTO_PRINCIPAL);
-
+                
                 if (roboInteligente.encontrarAlimento(alimentoX, alimentoY)) {
                     roboInteligenteAchou = true;
                 }
             } else {
-                statusLabel.setText("Robô Inteligente " + roboInteligente.getCor() + " evitou movimento inválido");
+                statusLabel.setText("Robô Inteligente " + roboInteligente.getCor() + " não conseguiu se mover a partir de " + direcao);
                 statusLabel.setTextFill(COR_SUCESSO);
             }
         } catch (MovimentoInvalidoException e) {
@@ -307,7 +307,7 @@ public class Main3Controller {
             statusLabel.setTextFill(COR_ERRO);
         }
     }
-
+    
     private void mostrarResultadoFinal() {
         String vencedor = roboNormalAchou && !roboInteligenteAchou ? roboNormal.getCor() :
                 !roboNormalAchou && roboInteligenteAchou ? roboInteligente.getCor() :
