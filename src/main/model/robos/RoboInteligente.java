@@ -1,14 +1,12 @@
 package main.model.robos;
 
 import main.exception.MovimentoInvalidoException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class RoboInteligente extends Robo {
 	
-	private final List<String> direcoesInvalidas = new ArrayList<>();
+	// Mapa de direções inválidas por posição
+	private final Map<String, List<String>> direcoesInvalidasPorPosicao = new HashMap<>();
 	
 	public RoboInteligente(String cor) {
 		super(cor);
@@ -17,33 +15,45 @@ public class RoboInteligente extends Robo {
 	@Override
 	public boolean mover(String direcao) {
 		String direcaoTentada = direcao.toLowerCase();
+		String posicaoAtual = posicaoX + "," + posicaoY;
 		
-		// Se a direção já foi marcada como impossível (posição negativa), nem tenta
+		List<String> direcoesInvalidas = direcoesInvalidasPorPosicao.getOrDefault(posicaoAtual, new ArrayList<>());
+		
+		// Se a direção já foi considerada inválida nessa posição, nem tenta
 		if (direcoesInvalidas.contains(direcaoTentada)) {
 			movimentosInvalidos++;
-			return tentarOutrasDirecoes(direcaoTentada);
+			return tentarOutrasDirecoes();
 		}
 		
 		try {
 			boolean sucesso = super.mover(direcaoTentada);
 			
 			if (sucesso) {
-				// Movimento bem-sucedido
 				return true;
 			} else {
-				// Movimento para fora dos limites (acima de 3), tenta outra direção, mas não marca como inválida
-				return tentarOutrasDirecoes(direcaoTentada);
+				// Se bateu na borda superior (não exceção, mas movimento inválido), registra como inválido nesta posição
+				registrarDirecaoInvalida(posicaoAtual, direcaoTentada);
+				return tentarOutrasDirecoes();
 			}
 			
 		} catch (MovimentoInvalidoException e) {
-			// Movimento inválido (posição negativa), registra como direção proibida
-			direcoesInvalidas.add(direcaoTentada);
+			// Movimento inválido (para posição negativa), também registra
+			registrarDirecaoInvalida(posicaoAtual, direcaoTentada);
 			movimentosInvalidos++;
-			return tentarOutrasDirecoes(direcaoTentada);
+			return tentarOutrasDirecoes();
 		}
 	}
 	
-	private boolean tentarOutrasDirecoes(String direcaoQueFalhou) {
+	private void registrarDirecaoInvalida(String posicao, String direcao) {
+		direcoesInvalidasPorPosicao
+				.computeIfAbsent(posicao, k -> new ArrayList<>())
+				.add(direcao);
+	}
+	
+	private boolean tentarOutrasDirecoes() {
+		String posicaoAtual = posicaoX + "," + posicaoY;
+		List<String> direcoesInvalidas = direcoesInvalidasPorPosicao.getOrDefault(posicaoAtual, new ArrayList<>());
+		
 		List<String> direcoesPossiveis = new ArrayList<>(Arrays.asList("up", "down", "left", "right"));
 		direcoesPossiveis.removeAll(direcoesInvalidas);
 		
@@ -55,12 +65,12 @@ public class RoboInteligente extends Robo {
 				
 				if (sucesso) {
 					return true;
+				} else {
+					registrarDirecaoInvalida(posicaoAtual, novaDirecao);
 				}
-				// Se não for sucesso (passou do limite superior), tenta outra
-				// Mas não marca como inválida, porque não é erro crítico
 				
 			} catch (MovimentoInvalidoException e) {
-				direcoesInvalidas.add(novaDirecao);
+				registrarDirecaoInvalida(posicaoAtual, novaDirecao);
 				movimentosInvalidos++;
 			}
 		}
@@ -83,11 +93,11 @@ public class RoboInteligente extends Robo {
 		return mover(direcao);
 	}
 	
-	public List<String> getDirecoesInvalidas() {
-		return new ArrayList<>(direcoesInvalidas);
+	public Map<String, List<String>> getDirecoesInvalidasPorPosicao() {
+		return new HashMap<>(direcoesInvalidasPorPosicao);
 	}
 	
 	public void resetarDirecoesInvalidas() {
-		direcoesInvalidas.clear();
+		direcoesInvalidasPorPosicao.clear();
 	}
 }
