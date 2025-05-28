@@ -459,7 +459,7 @@ public class Main4Controller {
     }
     
     private void iniciarMovimentacaoAutomatica() {
-        timeline = new Timeline(new KeyFrame(Duration.seconds(1.5), event -> {
+        timeline = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
             if (!jogoCompleto) {
                 if (!roboNormalAchou && !roboNormalExplodiu) {
                     moverRoboNormal();
@@ -469,9 +469,8 @@ public class Main4Controller {
                 }
                 desenharTabuleiro();
                 atualizarInfo();
-                
-                if ((roboNormalAchou || roboNormalExplodiu) &&
-                        (roboInteligenteAchou || roboInteligenteExplodiu)) {
+                if (roboNormalAchou || roboInteligenteAchou ||
+                        (roboNormalExplodiu && roboInteligenteExplodiu)) {
                     jogoCompleto = true;
                     timeline.stop();
                     Platform.runLater(() -> mostrarResultadoFinal());
@@ -481,7 +480,6 @@ public class Main4Controller {
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
-    
     private boolean movimentoValido(int x, int y) {
         return x >= 0 && x < tamanho && y >= 0 && y < tamanho;
     }
