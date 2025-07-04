@@ -6,7 +6,7 @@ Projeto em Java com JavaFX onde robôs se movimentam em um tabuleiro 4x4 para en
 
 ---
 
-## 🕹️ Modos de Jogo
+##  Modos de Jogo
 
 - **Main1**: Controle manual de um robô. O usuário define a posição do alimento e comanda os movimentos.
 - **Main2**: Dois robôs normais se movimentam aleatoriamente até que um encontre o alimento.
@@ -15,14 +15,14 @@ Projeto em Java com JavaFX onde robôs se movimentam em um tabuleiro 4x4 para en
 
 ---
 
-## ✅ Requisitos
+## Requisitos
 
 - **Java 17+**
 - **JavaFX SDK** (https://openjfx.io/)
 
 ---
 
-## ▶️ Como Executar
+##  Como Executar
 
 1. **Baixe o JavaFX SDK**:
    - [https://openjfx.io](https://openjfx.io)
@@ -38,7 +38,7 @@ Projeto em Java com JavaFX onde robôs se movimentam em um tabuleiro 4x4 para en
 
 ---
 
-## 📁 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 JogoRoboJava/
@@ -56,7 +56,7 @@ JogoRoboJava/
 ---
 
 
-## ✨ Funcionalidades
+## Funcionalidades
 
 - Robôs se movimentam no plano cartesiano (x, y ≥ 0)
 - Exceções para movimentos inválidos
